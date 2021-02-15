@@ -4,3 +4,4 @@
 /configs/api/keys/jwtRS256_pub.pem
 /configs/proxy/certs/cert.crt
 /configs/proxy/certs/cert.key
+/logs/
