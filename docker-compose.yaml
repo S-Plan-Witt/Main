@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  api:
+    image: ghcr.io/nils-witt/s-splan_api:latest
+    environment:
+      ORIGIN: "https://splan.example.de"
+      LDAP: "true"
+      LDAP_TLS: "true"
+      LDAP_HOST: "ldap://127.0.0.1"
+      LDAP_USER: "user"
+      LDAP_PASS: "pass"
+      LDAP_ROOT: "DC=domain,DC=local"
+      LDAP_STUDENTS: "OU=Students"
+      LDAP_TEACHER: "OU=Teachers"
+      LDAP_DOMAIN: "domain"
+
+      API_TELEGRAM: ""
+      API_SENDGRID: ""
+      VAPID_PUBLIC: ""
+      VAPID_PRIVATE: ""
+      VAPID_MAIL: "mailto:"
+
+      SQL_PORT: "3306"
+      SQL_HOST: "mysql"
+      SQL_USER: "splan"
+      SQL_PASS: ""
+      SQL_DB: "splan"
+    volumes:
+    - ./logs/api/:/usr/src/splan/log
+    - ./configs/api/keys:/usr/src/splan/keys
+    links:
+      - mysql
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_USER: "splan"
+      MYSQL_PASSWORD: ""
+      MYSQL_DATABASE: "splan"
+    volumes:
+      - ./data/database:/var/lib/mysql
+  pwa:
+    image: ghcr.io/nils-witt/s-plan_pwa:latest
+    ports:
+      - 8082:80
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=mysql
+    links:
+      - mysql
+    depends_on:
+      - mysql
+  reverseProxy:
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./configs/proxy/conf:/etc/nginx
+      - ./configs/proxy/certs:/etc/ssl/certs
+    links:
+      - api
+      - pwa
+      - phpmyadmin
+    depends_on:
+      - api
+      - pwa
+      - phpmyadmin
