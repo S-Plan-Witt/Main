@@ -1,0 +1,6 @@
+/data/
+/configs/api/keys/fcm_key.json
+/configs/api/keys/jwtRS256.pem
+/configs/api/keys/jwtRS256_pub.pem
+/configs/proxy/certs/cert.crt
+/configs/proxy/certs/cert.key
