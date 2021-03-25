@@ -2,23 +2,20 @@
 
 ## Setup
 
-### Requirements
-- SSL Certificates and DNS records
-- API requirements see https://github.com/Nils-witt/S-Plan_APi/blob/master/INSTALL.md
+Repository clonen
+```
+git clone https://github.com/Nils-witt/S-Plan
+```
 
-### Confguration
-1. Place the SSL certs as cert.key and cert.crt in configs/proxy/certs. 
-2. Adjust the configs in configs/proxy/conf/conf.d. e.g:
+Anpassung der Konfiguration
+1. SSL Zertifikate in `config/proxy/certs` kopieren
+2. Anpassung der Proxykonfiguration in `configs/proxy/conf/conf.d`
 ```bash
 server_name  api.splan.nils-witt.de;
 ```
-to
+zu
 ```bash
 server_name  your-domain;
 ```
-
-3. Place the API keyfiles under configs/api/keys
-4. Adjust the docker-compose.yaml to your servers 
-- ORIGIN must be the hostname of the PWA Container
-- LDAP* see https://github.com/Nils-witt/S-Plan_APi/blob/master/INSTALL.md -> LDAP Setup
-- MYSQL set a strong password for the server and put it in the api variables
+4. Die `docker-compose.yaml` ensprechdend anpassen
+5. Starten mit `docker-compose up -d`
